@@ -121,7 +121,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    // telegram-web-app.js sets --tg-viewport-* CSS vars on <html> before hydration.
+    <html lang="en" suppressHydrationWarning>
+
       <head>
         <HeadContent />
       </head>
