@@ -141,7 +141,7 @@ async function buildAdminData(filter: {
 }
 
 export const adminLoad = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({ status: z.string().optional(), search: z.string().max(64).optional() })
       .parse(data),
@@ -152,7 +152,7 @@ export const adminLoad = createServerFn({ method: "POST" })
   });
 
 export const adminReviewTransaction = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({
         transactionId: z.string().uuid(),
@@ -243,7 +243,7 @@ export const adminReviewTransaction = createServerFn({ method: "POST" })
   });
 
 export const adminUpdatePlayer = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({
         targetId: z.string().uuid(),
@@ -267,7 +267,7 @@ export const adminUpdatePlayer = createServerFn({ method: "POST" })
   });
 
 export const adminUpdateSettings = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({
         minDeposit: z.number().min(0).max(10000),

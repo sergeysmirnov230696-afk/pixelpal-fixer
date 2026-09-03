@@ -293,7 +293,7 @@ async function payReferralBonus(inviterKey: string, invitedKey: string) {
 const keySchema = z.object({ playerKey: z.string().min(3).max(64) });
 
 export const loadPlayer = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     z
       .object({
         playerKey: z.string().min(3).max(64),
@@ -344,7 +344,7 @@ export const loadPlayer = createServerFn({ method: "POST" })
   });
 
 export const setLanguage = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema.extend({ language: z.enum(["en", "ru"]) }).parse(data),
   )
   .handler(async ({ data }) => {
@@ -354,7 +354,7 @@ export const setLanguage = createServerFn({ method: "POST" })
   });
 
 export const buyDragon = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({ dragonId: z.number().int().refine((id) => DRAGONS.some((d) => d.id === id)) })
       .parse(data),
@@ -392,7 +392,7 @@ export const buyDragon = createServerFn({ method: "POST" })
   });
 
 export const collectIncome = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => keySchema.parse(data))
+  .validator((data: unknown) => keySchema.parse(data))
   .handler(async ({ data }) => {
     const db = await admin();
     const { data: player } = await db
@@ -429,7 +429,7 @@ export const collectIncome = createServerFn({ method: "POST" })
   });
 
 export const collectReferral = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => keySchema.parse(data))
+  .validator((data: unknown) => keySchema.parse(data))
   .handler(async ({ data }) => {
     const db = await admin();
     const { data: player } = await db
@@ -453,7 +453,7 @@ export const collectReferral = createServerFn({ method: "POST" })
   });
 
 export const createDeposit = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({ method: z.enum(CURRENCY_CODES), amount: z.number().positive().max(100000) })
       .parse(data),
@@ -509,7 +509,7 @@ export const createDeposit = createServerFn({ method: "POST" })
   });
 
 export const createWithdraw = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({ method: z.enum(CURRENCY_CODES), amount: z.number().positive().max(100000) })
       .parse(data),
@@ -544,7 +544,7 @@ export const createWithdraw = createServerFn({ method: "POST" })
   });
 
 export const savePayoutAddress = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema
       .extend({ method: z.enum(CURRENCY_CODES), address: z.string().min(6).max(120) })
       .parse(data),
@@ -567,7 +567,7 @@ export const savePayoutAddress = createServerFn({ method: "POST" })
 /* ---------------------------------------------------------------- features */
 
 export const claimDailyBonus = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => keySchema.parse(data))
+  .validator((data: unknown) => keySchema.parse(data))
   .handler(async ({ data }) => {
     const db = await admin();
     const { data: player } = await db
@@ -598,7 +598,7 @@ export const claimDailyBonus = createServerFn({ method: "POST" })
   });
 
 export const buyBoost = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema.extend({ boostId: z.string().max(24) }).parse(data),
   )
   .handler(async ({ data }) => {
@@ -630,7 +630,7 @@ export const buyBoost = createServerFn({ method: "POST" })
   });
 
 export const claimAchievement = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => keySchema.extend({ key: z.string().max(32) }).parse(data))
+  .validator((data: unknown) => keySchema.extend({ key: z.string().max(32) }).parse(data))
   .handler(async ({ data }) => {
     const spec = ACHIEVEMENTS.find((a) => a.key === data.key);
     if (!spec) throw new Error("ACHIEVEMENT_UNKNOWN");
@@ -661,7 +661,7 @@ export const claimAchievement = createServerFn({ method: "POST" })
   });
 
 export const redeemPromo = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) =>
+  .validator((data: unknown) =>
     keySchema.extend({ code: z.string().min(2).max(32) }).parse(data),
   )
   .handler(async ({ data }) => {
